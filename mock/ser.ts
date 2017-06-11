@@ -1,10 +1,11 @@
 import * as express from 'express'
-const app=express()
 import * as bodyParser from 'body-parser'
 import {ad} from './ad'
 import  Productdetail from './detail'
 import homelistData from './list'
 import comments from './comments'
+import * as fs from 'fs'
+const app=express()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.get('/api/ad',(req,res)=>{
   console.log('首页-超级特惠-请求','\n***************')
@@ -72,13 +73,75 @@ app.post('/api/login',(req,res)=>{
   }
   res.send(resp)
 })
-app.post('/api/submitcomment',(req,res)=>{
-  console.log('订单评论',req.body,'\n***************')
-  const resp={
-    status:true,
-    text:'ok'
+
+app.post('/api/register',(req,res)=>{
+  console.log('-----------------\n','注册用户',req.body,'\n***************')
+  const regUser=req.body
+  const email=regUser.email
+  const pass=regUser.pass
+  let users
+  //检测文件是否存在
+  if(fs.existsSync('./mock/user.json')){
+    let readStream=fs.createReadStream('./mock/user.json',{
+    encoding:'utf8',
+    flags:'r'
+  })
+ 
+  readStream.on('error',e=>{
+    console.log('文件读取失败')
+  })
+  readStream.on('close',e=>{
+    console.log('文件被关闭')
+    console.log('\n-----------------\n')
+  })
+  readStream.on('open',chunk=>{
+    console.log('文件被打开')
+  })
+  readStream.on('data',chunk=>{
+    users=chunk
+    console.log('读取到数据') 
+})
+readStream.on('end',chunk=>{
+ users=JSON.parse(users)
+   const isAccessful=users.every(item=>{
+if(item.email!==regUser.email){
+  return true
+}
+else{
+return false
+}
+  })
+  if(isAccessful){
+    //添加新注册用户到user数组中
+    users.push({
+      email,
+      pass
+    })
+    //如果用户邮箱没有注册，写入数据到user.json
+    let rstream=fs.createWriteStream('./mock/user.json')
+ rstream.write(JSON.stringify(users))
+    //异步添加用户到数据库后，返回状态码给客户端
+    const resp={
+    statusCode:1,
+    text:'注册成功！'
   }
   res.send(resp)
+  }
+  else{
+    const resp={
+    statusCode:0,
+    text:'该邮箱已经被注册！'
+  }
+  res.send(resp)
+}
+
+})
+
+  }
+  
+ 
+ 
+ 
 })
 app.listen(8888,"localhost",()=>{
   console.log('ser is running at 8888','\n***************')

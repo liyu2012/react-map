@@ -1,6 +1,6 @@
  import { obj2params } from '../js/util'
  export function post(url, params) {
-     console.log(params)
+     // console.log(params)
      const result = fetch(url, {
          method: 'POST',
          headers: {

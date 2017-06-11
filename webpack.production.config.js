@@ -9,7 +9,7 @@ module.exports = {
         vendor: Object.keys(pkg.dependencies)
     },
     output: {
-        filename: './production_online/dist/js/[name].[chunkhash:8].js'
+        filename: './dist/static/js/[name].[chunkhash:8].js'
     },
     resolve: {
         extensions: ['.js', '.jsx', '.json']

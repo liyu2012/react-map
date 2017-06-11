@@ -50,9 +50,14 @@ module.exports = {
                 exclude: /(node_modules)/,
                 loader: 'style-loader!css-loader!less-loader'
             }, {
-                test: /\.(png|gif|svg|ttf|eot|woff|woff2|jpg|jpeg|bmp)($|\?)/i,
+                test: /\.(svg|ttf|eot|woff|woff2)($|\?)/i,
                 exclude: /(node_modules)/,
                 loader: 'url-loader?limit=10000'
+            },
+            {
+                test: /\.(png|gif|jpg|jpeg|bmp)($|\?)/i,
+                exclude: /(node_modules)/,
+                loader: 'url-loader?limit=1'
             }
         ]
     },

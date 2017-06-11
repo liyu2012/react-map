@@ -1,12 +1,13 @@
 "use strict";
 exports.__esModule = true;
 var express = require("express");
-var app = express();
 var bodyParser = require("body-parser");
 var ad_1 = require("./ad");
 var detail_1 = require("./detail");
 var list_1 = require("./list");
 var comments_1 = require("./comments");
+var fs = require("fs");
+var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.get('/api/ad', function (req, res) {
     console.log('首页-超级特惠-请求', '\n***************');
@@ -69,13 +70,67 @@ app.post('/api/login', function (req, res) {
     };
     res.send(resp);
 });
-app.post('/api/submitcomment', function (req, res) {
-    console.log('订单评论', req.body, '\n***************');
-    var resp = {
-        status: true,
-        text: 'ok'
-    };
-    res.send(resp);
+app.post('/api/register', function (req, res) {
+    console.log('-----------------\n', '注册用户', req.body, '\n***************');
+    var regUser = req.body;
+    var email = regUser.email;
+    var pass = regUser.pass;
+    var users;
+    //检测文件是否存在
+    if (fs.existsSync('./mock/user.json')) {
+        var readStream = fs.createReadStream('./mock/user.json', {
+            encoding: 'utf8',
+            flags: 'r'
+        });
+        readStream.on('error', function (e) {
+            console.log('文件读取失败');
+        });
+        readStream.on('close', function (e) {
+            console.log('文件被关闭');
+            console.log('\n-----------------\n');
+        });
+        readStream.on('open', function (chunk) {
+            console.log('文件被打开');
+        });
+        readStream.on('data', function (chunk) {
+            users = chunk;
+            console.log('读取到数据');
+        });
+        readStream.on('end', function (chunk) {
+            users = JSON.parse(users);
+            var isAccessful = users.every(function (item) {
+                if (item.email !== regUser.email) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            });
+            if (isAccessful) {
+                //添加新注册用户到user数组中
+                users.push({
+                    email: email,
+                    pass: pass
+                });
+                //如果用户邮箱没有注册，写入数据到user.json
+                var rstream = fs.createWriteStream('./mock/user.json');
+                rstream.write(JSON.stringify(users));
+                //异步添加用户到数据库后，返回状态码给客户端
+                var resp = {
+                    statusCode: 1,
+                    text: '注册成功！'
+                };
+                res.send(resp);
+            }
+            else {
+                var resp = {
+                    statusCode: 0,
+                    text: '该邮箱已经被注册！'
+                };
+                res.send(resp);
+            }
+        });
+    }
 });
 app.listen(8888, "localhost", function () {
     console.log('ser is running at 8888', '\n***************');
