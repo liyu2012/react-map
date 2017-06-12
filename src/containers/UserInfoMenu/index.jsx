@@ -1,25 +1,28 @@
-
 import React from 'react'
-import Settings from '../../Settings'
+import ToggleButton from './subpage/ToggleButton'
+import Settings from '../Settings'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
-export default class UserInfo extends React.Component{
+export default class NavMenu extends React.Component{
   //constructor function that assign the properties
    constructor(...args){
     super(...args)
     this.shouldComponentUpdate=PureRenderMixin.shouldComponentUpdate
     this.state={
-    
+     isLogined:this.props.isLogined
     }
   }
+
   componentDidMount(){
-    this.setState({
-      userName:'Ajaxyz'
-    })
+ 
   }
+
   render(){
     return(
-      <div>
-   <li className="dropdown messages-menu">
+      <nav className="navbar navbar-static-top" role="navigation">
+     <ToggleButton/>
+   <div className="navbar-custom-menu">
+        <ul className="nav navbar-nav">
+     <li className="dropdown messages-menu">
             <a href="#" className="dropdown-toggle" data-toggle="dropdown">
               <i className="fa fa-envelope-o"></i>
               <span className="label label-success">4</span>
@@ -147,9 +150,10 @@ export default class UserInfo extends React.Component{
               </li>
             </ul>
           </li>
-     <Settings/>
-     </div>
-
+     <Settings/>  
+        </ul>
+      </div> 
+    </nav>
     )
   }
 } 

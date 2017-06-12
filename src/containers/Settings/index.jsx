@@ -7,13 +7,9 @@ export default class Settings extends React.Component{
     super(...args)
     this.shouldComponentUpdate=PureRenderMixin.shouldComponentUpdate
   }
-
-  componentDidMount(){
-  }
   render(){
     return(
  <li><a href="#" data-toggle="control-sidebar"><i className="fa fa-cog"></i>&nbsp;设置</a></li>
- 
     )
   }
 } 

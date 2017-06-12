@@ -2,7 +2,10 @@ import React from 'react'
 import './style.less'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import {post} from '../../fetch/post'
+import {getCookie} from '../../cookie/get'
+import {setCookie} from '../../cookie/set'
 import TextInfo from './subpage/textInfo'
+import {handleLog} from '../../fetch/login/login'
 export default class SignIn extends React.Component{
   //constructor function that assign the properties
    constructor(...args){
@@ -10,13 +13,13 @@ export default class SignIn extends React.Component{
     this.shouldComponentUpdate=PureRenderMixin.shouldComponentUpdate
     this.state={
       regEmail:'',
+      logEmail:'',
+      logPass:'',
       regPass:'',
       text:''
     }
   }
 
-  componentDidMount(){
-  }
   handleRegEmail(){
     const value=this.refs['reg-email'].value
     this.setState({
@@ -31,11 +34,39 @@ export default class SignIn extends React.Component{
     })
   }
 
-handleLog(){
-  this.props.cancel()
-//login
-
+//input signin email
+handleLogEmail(){
+this.setState({
+    logEmail:this.refs['log-email'].value
+})
 }
+//input sign in pass
+handleLogPass(){
+this.setState({
+    logPass:this.refs['log-pass'].value
+})
+}
+//handle click event to log
+handleClickLog(){
+    handleLog({
+        email:this.state.logEmail,
+        pass:this.state.logPass
+    },7).then(json => {
+        if (json.statusCode === 1) {
+            setCookie('email', this.state.logEmail, 7)
+            setCookie('pass', this.state.logPass,7)
+            this.props.cancel()
+            window.location.href="http://localhost:8080"
+        } else {
+            this.setState({
+                text: json.text
+            })
+        }
+
+    })
+}
+//handle log in button click event
+
 handleRegSecondPass(){
 
 }
@@ -51,7 +82,10 @@ handleRegSecondPass(){
           this.setState({
           text:json.text
         })
-        this.handleLog()
+        this.handleLog({
+    email:this.state.regEmail,
+    pass:this.state.regPass
+  })
       }
        
        else{
@@ -124,14 +158,14 @@ handleRegSecondPass(){
                         <div className="form-group">
                             <label htmlFor="inputEmail3" className="col-sm-3 control-label">电子邮件：</label>
                             <div className="col-sm-8 ">
-                                <input type="email" className="form-control" id="inputEmail3" placeholder="输入您的电子邮件" />
+                                <input type="email" ref="log-email" onChange={this.handleLogEmail.bind(this)}  className="form-control" id="inputEmail3" placeholder="输入您的电子邮件" />
                             </div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="inputPassword3" className="col-sm-3 control-label">用户密码：</label>
 
                             <div className="col-sm-8 ">
-                                <input type="password" className="form-control" id="inputPassword3" placeholder="输入大于六位密码" />
+                                <input type="password" ref="log-pass" onChange={this.handleLogPass.bind(this)}  className="form-control" id="inputPassword3" placeholder="输入大于六位密码" />
                             </div>
                         </div>
                         <div className="form-group">
@@ -143,12 +177,12 @@ handleRegSecondPass(){
                                 </div>
                             </div>
                         </div>
+                         <TextInfo text={this.state.text}/>
                     </div>
 
                     <div className="box-footer">
-
-                        <button type="submit" className="btn btn-success pull-right">登陆</button>&nbsp;
-                        <button type="submit" onClick={this.props.cancel} className="btn btn-danger pull-right">取消</button>
+                        <button  onClick={this.handleClickLog.bind(this)} className="btn btn-success pull-right">登陆</button>&nbsp;
+                        <button  onClick={this.props.cancel} className="btn btn-danger pull-right">取消</button>
                     </div>
                 </form>
             </div>

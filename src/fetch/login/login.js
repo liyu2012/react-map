@@ -1,13 +1,12 @@
 import { post } from '../post'
-export function postLoginData(name, pass) {
-    if (name == null || name == '' || pass == null || pass == '') {
-        return
-
+export function handleLog(params, expires) {
+    const url = 'api/login'
+    const config = {
+        email: params.email,
+        pass: params.pass
     }
-    //console.log(name, pass)
-    const result = post(`http://localhost:8080/api/login`, {
-        name,
-        pass
+    const json = post(url, config).then(res => {
+        return res.json()
     })
-    return result
+    return json
 }

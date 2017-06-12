@@ -1,24 +1,26 @@
+
 import React from 'react'
-import UserInfoMenu from '../UserInfoMenu'
-import SignMenu from '../SignMenu'
-import Logo from './subpage/Logo'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
-import './style.less'
-export default class Header extends React.Component{
+export default class Logo extends React.Component{
   //constructor function that assign the properties
    constructor(...args){
     super(...args)
     this.shouldComponentUpdate=PureRenderMixin.shouldComponentUpdate
+    this.state={
+      userName:''
+    }
   }
-
   componentDidMount(){
+    this.setState({
+      userName:'Ajaxyz'
+    })
   }
   render(){
     return(
- <header className="main-header">
-  <Logo/>
- {this.props.isLogined?<UserInfoMenu/>:<SignMenu/>}
-  </header>
+     <a href="#" className="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span className="sr-only">Toggle navigation</span>
+      </a>
+
     )
   }
 } 

@@ -1,8 +1,6 @@
 import React from 'react'
 import ToggleButton from './subpage/ToggleButton'
-
 import SignIn from '../SignIn'
-import UserInfo from './subpage/UserInfo'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 export default class NavMenu extends React.Component{
   //constructor function that assign the properties
@@ -10,7 +8,7 @@ export default class NavMenu extends React.Component{
     super(...args)
     this.shouldComponentUpdate=PureRenderMixin.shouldComponentUpdate
     this.state={
-      userId:''
+     isLogined:this.props.isLogined
     }
   }
 
@@ -26,9 +24,7 @@ export default class NavMenu extends React.Component{
      <ToggleButton/>
    <div className="navbar-custom-menu">
         <ul className="nav navbar-nav">
-     {
-         this.state.userId==null?<SignIn/>:<UserInfo/>     
-     }
+     <SignIn/>    
         </ul>
       </div> 
     </nav>

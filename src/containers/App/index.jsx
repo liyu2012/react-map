@@ -4,17 +4,39 @@ import Footer from '../../components/Footer'
 import MapWrapper from '../MapWrapper'
 import Header from '../Header'
 import ControlAside from '../ControlAside'
+import {getCookie} from '../../cookie/get'
+import {handleLog} from '../../fetch/login/login'
 export default class App extends React.Component{
   //constructor function that assign the properties
    constructor(...args){
     super(...args)
     this.shouldComponentUpdate=PureRenderMixin.shouldComponentUpdate
- 
+ this.state={
+   isLogined:false
+ }
+  }
+  componentDidMount(){
+const email=getCookie('email')
+const pass=getCookie('pass')
+console.log(222,email)
+if(!!email){
+handleLog({
+  email,
+  pass
+},7).then(json=>{
+  if(json.statusCode==1){
+this.setState({
+  isLogined:true
+})
+  }
+})
+}
+
   }
   render(){
     return(
      <div className="wrapper">
- <Header/>
+ <Header isLogined={this.state.isLogined}/>
  {/* <!-- Left side column. contains the logo and sidebar -->*/}
   <aside className="main-sidebar">
     {/*<!-- sidebar: style can be found in sidebar.less -->*/}

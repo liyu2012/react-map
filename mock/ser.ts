@@ -6,20 +6,8 @@ import homelistData from './list'
 import comments from './comments'
 import * as fs from 'fs'
 const app=express()
+ let users
 app.use(bodyParser.urlencoded({ extended: false }))
-app.get('/api/ad',(req,res)=>{
-  console.log('首页-超级特惠-请求','\n***************')
-  res.send(ad)
-})
-
-app.get('/api/list/:city/:page',(req,res)=>{
-  const params=req.params
-  const city =params.city
-  const page=params.page
-  console.log('首页列表',city,page,'\n***************')
-  res.send(homelistData)
-})
- 
  app.get('/api/search/:city/:type/:keyword?',(req,res)=>{
   const params=req.params
   const city =params.city
@@ -53,25 +41,57 @@ app.get('/api/comments/:id/:page',(req,res)=>{
   })*/
   res.send(comment)
 })
-const  orderlist=require('./orderlist.js')
-app.get('/api/orderlist/:user/:page',(req,res)=>{
-  const user=req.params.user
-  const page=req.params.page
-  console.log('订单查询','用户标识：',user,'订单页码：',page,'\n***************')
-  const data=orderlist.find((item)=>{
-    return item.id==user
-    
-  })
-  res.send(data.list)
-})
 
 app.post('/api/login',(req,res)=>{
+   console.log('\n-----------------\n')
   console.log('登录验证',req.body,'\n***************')
-  const resp={
-    status:'success',
-    statusCode:200
+const email=req.body.email
+const pass=req.body.pass
+  if(fs.existsSync('./mock/user.json')){
+let readStream=fs.createReadStream('./mock/user.json',{
+    encoding:'utf8',
+    flags:'r'
+  })
+  readStream.on('error',e=>{
+    console.log('文件读取失败')
+  })
+  readStream.on('close',e=>{
+    console.log('文件被关闭')
+    console.log('\n-----------------\n')
+  })
+  readStream.on('open',chunk=>{
+    console.log('文件被打开')
+  })
+  readStream.on('data',chunk=>{
+    users=chunk
+    console.log('读取到数据') 
+})
+
+readStream.on('end',chunk=>{
+ users=JSON.parse(users)
+   const isAccessful=users.some(item=>{
+return item.email===email&&item.pass===pass
+
+  })
+  if(isAccessful){
+    const resp={
+    statusCode:1,
+    text:'登陆成功！'
   }
   res.send(resp)
+ 
+  }
+  else{
+    const resp={
+    statusCode:0,
+    text:'用户名或密码错误'
+  }
+  res.send(resp)
+}
+
+})
+  }
+   
 })
 
 app.post('/api/register',(req,res)=>{
@@ -79,7 +99,7 @@ app.post('/api/register',(req,res)=>{
   const regUser=req.body
   const email=regUser.email
   const pass=regUser.pass
-  let users
+ 
   //检测文件是否存在
   if(fs.existsSync('./mock/user.json')){
     let readStream=fs.createReadStream('./mock/user.json',{
