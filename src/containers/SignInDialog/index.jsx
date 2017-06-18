@@ -101,13 +101,13 @@ handleRegSecondPass(){
   render(){
     return(
  <div className="box box-info">
-   
-            <div className="box-header with-border">
+             <div className="box-header with-border">
              <div className="nav-tabs-custom">
         <ul className="nav nav-tabs">
             <li><a href="#tab_1" data-toggle="tab" aria-expanded="false">注册</a></li>
             <li className="active"><a href="#tab_2" data-toggle="tab" aria-expanded="true">登陆</a></li>
         </ul>
+        
         <div className="tab-content">
             <div className="tab-pane" id="tab_1">
                 <form className="form-horizontal">
@@ -143,12 +143,6 @@ handleRegSecondPass(){
                         </div>
                         <TextInfo text={this.state.text}/>
                     </div>
-
-                    <div className="box-footer">
-
-                        <button  onClick={this.handleReg.bind(this)} className="btn btn-success pull-right">注册</button>&nbsp;
-                        <button  onClick={this.props.cancel} className="btn btn-danger pull-right">取消</button>
-                    </div>
                 </form>
             </div>
            
@@ -178,18 +172,10 @@ handleRegSecondPass(){
                             </div>
                         </div>
                          <TextInfo text={this.state.text}/>
-                    </div>
-
-                    <div className="box-footer">
-                        <button  onClick={this.handleClickLog.bind(this)} className="btn btn-success pull-right">登陆</button>&nbsp;
-                        <button  onClick={this.props.cancel} className="btn btn-danger pull-right">取消</button>
-                    </div>
+                    </div>               
                 </form>
             </div>
-        
-
         </div>
- 
     </div>
               </div>
          

@@ -3,22 +3,32 @@ import PureRenderMixin from 'react-addons-pure-render-mixin'
 import Footer from '../../components/Footer'
 import MapWrapper from '../MapWrapper'
 import Header from '../Header'
+import LeftAside from '../LeftAside'
 import ControlAside from '../ControlAside'
 import {getCookie} from '../../cookie/get'
 import {handleLog} from '../../fetch/login/login'
-export default class App extends React.Component{
+import Dialog from '../../components/Dialog'
+import PointEditor from '../PointEditor'
+import SignUp from '../SignInDialog'
+import IconSelector from '../IconSelector'
+import {Provider,connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
+import actions from '../../actions/point'
+ class App extends React.Component{
   //constructor function that assign the properties
    constructor(...args){
     super(...args)
     this.shouldComponentUpdate=PureRenderMixin.shouldComponentUpdate
  this.state={
-   isLogined:false
+   isLogined:false,
+   pointSettings:{},
+   iconSettings:{},
+   editType:0
  }
   }
   componentDidMount(){
 const email=getCookie('email')
 const pass=getCookie('pass')
-console.log(222,email)
 if(!!email){
 handleLog({
   email,
@@ -33,66 +43,53 @@ this.setState({
 }
 
   }
+  handlePointSetting(obj){
+   this.setState({pointSettings:obj})
+  }
+
+ handleIconSettings(obj){
+   this.setState({iconSettings:obj})
+  }
+
+  handleLoginandSignUp(data){
+
+  }
+  setEditType(i){
+ this.setState({
+   editType:i
+  })
+ 
+  }
   render(){
     return(
-     <div className="wrapper">
+<div className="wrapper">
  <Header isLogined={this.state.isLogined}/>
- {/* <!-- Left side column. contains the logo and sidebar -->*/}
-  <aside className="main-sidebar">
-    {/*<!-- sidebar: style can be found in sidebar.less -->*/}
-    <section className="sidebar">
-
-      {/*<!-- Sidebar user panel (optional) -->*/}
-      <div className="user-panel">
-        <div className="pull-left image">
-          <img src="dist/static/img/user2-160x160.jpg" className="img-circle" alt="User Image"/>
-        </div>
-        <div className="pull-left info">
-          <p>Alexander Pierce</p>
-          {/*<!-- Status -->*/}
-          <a href="#"><i className="fa fa-circle text-success"></i> Online</a>
-        </div>
-      </div>
-
-     {/* <!-- search form (Optional) -->*/}
-      <form action="#" method="get" className="sidebar-form">
-        <div className="input-group">
-          <input type="text" name="q" className="form-control" placeholder="Search..."/>
-              <span className="input-group-btn">
-                <button type="submit" name="search" id="search-btn" className="btn btn-flat"><i className="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
-     {/* <!-- /.search form -->
-
-      <!-- Sidebar Menu -->*/}
-      <ul className="sidebar-menu">
-        <li className="header">工作台</li>
-      {/*  <!-- Optionally, you can add icons to the links -->*/}
-        <li className="active"><a href="#"><i className="fa fa-link"></i> <span>我的地图</span></a></li>
-        <li><a href="#"><i className="fa fa-link"></i> <span>地图编辑</span></a></li>
-        <li className="treeview">
-          <a href="#"><i className="fa fa-link"></i> <span>Multilevel</span>
-            <span className="pull-right-container">
-              <i className="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul className="treeview-menu">
-            <li><a href="#">Link in level 2</a></li>
-            <li><a href="#">Link in level 2</a></li>
-          </ul>
-        </li>
-      </ul>
-     {/* <!-- /.sidebar-menu -->*/}
-    </section>
-   {/* <!-- /.sidebar -->*/}
-  </aside>
-<MapWrapper/>
+ <LeftAside setEditType={this.setEditType.bind(this)}/>
+<MapWrapper iconSettings={this.state.iconSettings} pointSettings={this.state.pointSettings} editType={this.state.editType}/>
  <Footer/>
  <ControlAside/>
-  
+  <Dialog  id="point" content="point">
+<PointEditor title="点要素选项卡" handleOk={this.handlePointSetting.bind(this)}/>
+  </Dialog>
+    <Dialog id="signup" content="signup">
+<SignUp  title="用户登陆/注册" handleOk={this.handleLoginandSignUp.bind(this)}/>
+  </Dialog>
+  {/*设置自定义图标的选择对话框*/}
+<Dialog id="icon" content="icon">
+<IconSelector handleIconSettings={this.handleIconSettings.bind(this)} title="选择图标样式"/>
+  </Dialog>
 </div>   
     )
   }
 } 
+function mapStateToProps(state){
+return{
+point:state.point
+}
+}
+function mapDispatchToProps(dispatch){
+  return {
+    actions:bindActionCreators(actions,dispatch)
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(App)

@@ -1,5 +1,0 @@
- const ACTIONS = {
-     USERINFO_UPDATE: "USERINFO_UPDATE",
-     USERINFO_LOGIN: "USERINFO_LOGIN"
- }
- export default ACTIONS

@@ -25,11 +25,10 @@ cancel(){
   })
 }
   render(){
-    return(
-      
+    return(   
         <li>
-   <a href="#" onClick={this.handleClick.bind(this)}><i className="glyphicon glyphicon-pencil"></i>&nbsp;登录/注册</a>
-   {this.state.isVisable===true?<SignDialog cancel={this.cancel.bind(this)}/>:''}
+   <a href="#" data-toggle="modal" data-target="#signup"><i className="glyphicon glyphicon-pencil"></i>&nbsp;登录/注册</a>
+ 
  </li>
  
      

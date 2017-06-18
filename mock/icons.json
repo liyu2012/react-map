@@ -1,0 +1,17 @@
+[{
+    "src": "./dist/static/img/mapicon/clock.png",
+    "alias": "clock"
+
+}, {
+    "src": "./dist/static/img/mapicon/plane.png",
+    "alias": "plane"
+
+}, {
+    "src": "./dist/static/img/mapicon/train.png",
+    "alias": "train"
+
+}, {
+    "src": "./dist/static/img/mapicon/user.png",
+    "alias": "user"
+
+}]
