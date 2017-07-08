@@ -1,0 +1,19 @@
+[{
+    "email": "lllyyy2012@icloud.com",
+    "alias": "Ajaxyz",
+    "state": "我是海贼王的男人",
+    "avadar": "./dist/static/img/avatar3.png",
+    "message": [{
+        "from": "maomao",
+        "time": "2017-3-12 19:23:23",
+        "avadar": "./dist/static/img/avatar2.png",
+        "content": "hello,nice to meet you!",
+        "title": "问候信"
+    }, {
+        "from": "马云",
+        "time": "2017-4-12 09:23:23",
+        "avadar": "./dist/static/img/avatar04.png",
+        "content": "团队欢迎你",
+        "title": "新用户通知"
+    }]
+}]

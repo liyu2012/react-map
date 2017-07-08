@@ -41,7 +41,8 @@ this.props.setEditType(i)
       <ul className="sidebar-menu">
         <li className="header">工作台</li>
        <li ><a href="#"><i className="fa fa-link"></i> <span>热门推荐</span></a></li>
-        <li className="active"><a href="#"><i className="fa fa-link"></i> <span>我的地图</span></a></li>
+         <li><a href="#"><i className="fa fa-link"></i> <span>我的收藏</span></a></li>
+        <li className="active"><a href="#"><i className="fa fa-link"></i> <span>我的发布</span></a></li>
         <li><a href="#"><i className="fa fa-link"></i> <span>底图选择</span></a></li>
         <li className="treeview">
           <a href="#"><i className="fa fa-link"></i> <span>地图编辑</span>
@@ -52,6 +53,7 @@ this.props.setEditType(i)
           <ul className="treeview-menu">
             <li><a data-toggle="modal" data-target="#point" onClick={this.handleClick.bind(this,1)}>普通圆点</a></li>
             <li><a data-toggle="modal" data-target="#icon" onClick={this.handleClick.bind(this,2)} href="#">自定义图标</a></li>
+             <li><a href="#">面绘制</a></li>
             <li><a href="#">线符号</a></li>
           </ul>
         </li>

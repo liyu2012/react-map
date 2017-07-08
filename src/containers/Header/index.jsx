@@ -17,7 +17,7 @@ export default class Header extends React.Component{
     return(
  <header className="main-header">
   <Logo/>
- {this.props.isLogined?<UserInfoMenu/>:<SignMenu/>}
+ {this.props.isLogined?<UserInfoMenu userInfo={this.props.userInfo}/>:<SignMenu/>}
   </header>
     )
   }

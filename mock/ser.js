@@ -3,6 +3,7 @@ exports.__esModule = true;
 var express = require("express");
 var bodyParser = require("body-parser");
 var fs = require("fs");
+//import * as userInfo from './userinfo.json'
 var app = express();
 //获取自定义图标的json
 app.get('/api/icons', function (req, res) {
@@ -118,7 +119,7 @@ app.post('/api/login', bodyParser.urlencoded({ extended: false }), function (req
         });
         readStream.on('close', function (e) {
             console.log('文件被关闭');
-            console.log('\n-----------------\n');
+            console.log('\n******user login********\n');
         });
         readStream.on('open', function (chunk) {
             console.log('文件被打开');
@@ -138,11 +139,27 @@ app.post('/api/login', bodyParser.urlencoded({ extended: false }), function (req
                 return item.email === email && item.pass === pass;
             });
             if (isAccessful) {
-                var resp = {
-                    statusCode: 1,
-                    text: '登陆成功！'
-                };
-                res.send(resp);
+                var readStream_1 = fs.createReadStream('./mock/userinfo.json', {
+                    encoding: 'utf8',
+                    flags: 'r'
+                });
+                var userInfo_1;
+                readStream_1.on('data', function (chunk) {
+                    userInfo_1 = chunk;
+                });
+                readStream_1.on('end', function (chunk) {
+                    var data = JSON.parse(userInfo_1);
+                    data.some(function (item) {
+                        if (item.email === email) {
+                            var resp = {
+                                statusCode: 1,
+                                data: item
+                            };
+                            res.send(resp);
+                            return true;
+                        }
+                    });
+                });
             }
             else {
                 var resp = {
@@ -156,7 +173,7 @@ app.post('/api/login', bodyParser.urlencoded({ extended: false }), function (req
 });
 //添加地图marker
 app.post('/api/addicons', bodyParser.json(), function (req, res) {
-    console.log('\n******add icons********\n');
+    console.log('\n****** add icons ********\n');
     var pointsJSON;
     var icons = req.body;
     if (fs.existsSync('./mock/icons.json')) {
@@ -166,6 +183,9 @@ app.post('/api/addicons', bodyParser.json(), function (req, res) {
         });
         readStream.on('data', function (chunk) {
             pointsJSON = chunk;
+        });
+        readStream.on('close', function (e) {
+            console.log('\n****** add icons ********\n');
         });
         readStream.on('end', function (chunk) {
             var pointsData;

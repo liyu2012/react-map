@@ -1,8 +1,8 @@
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as fs from 'fs'
+//import * as userInfo from './userinfo.json'
 const app=express()
-
 //获取自定义图标的json
  app.get('/api/icons',(req,res)=>{
     console.log('\n******get icons********\n')
@@ -108,11 +108,11 @@ readStream.on('end',chunk=>{
 )
 
 app.post('/api/login', bodyParser.urlencoded({ extended: false }),(req,res)=>{
-  console.log('\n******user login********\n')
+console.log('\n******user login********\n')
 let users
 const email=req.body.email
 const pass=req.body.pass
-  if(fs.existsSync('./mock/user.json')){
+if(fs.existsSync('./mock/user.json')){
 let readStream=fs.createReadStream('./mock/user.json',{
     encoding:'utf8',
     flags:'r'
@@ -145,11 +145,29 @@ return item.email===email&&item.pass===pass
 
   })
   if(isAccessful){
+    let readStream=fs.createReadStream('./mock/userinfo.json',{
+    encoding:'utf8',
+    flags:'r'
+  })
+  let userInfo
+  readStream.on('data',chunk=>{
+userInfo=chunk
+  })
+    readStream.on('end',chunk=>{
+  const data=JSON.parse(userInfo)
+  data.some(item=>{
+    if(item.email===email){
     const resp={
     statusCode:1,
-    text:'登陆成功！'
+    data:item
   }
-  res.send(resp)
+    res.send(resp)
+    return true
+    }
+  })
+  
+  })
+  
  
   }
   else{

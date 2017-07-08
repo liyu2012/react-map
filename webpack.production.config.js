@@ -49,11 +49,11 @@ module.exports = {
         new webpack.BannerPlugin("copyright:lllyyy2012@icloud.com"),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
-            filename: './production_online/dist/js/[name].[chunkhash:8].js'
+            filename: './dist/static/js/[name].[chunkhash:8].js'
         }),
         new HtmlWebpackPlugin({
             template: './src/index.html',
-            filename: './production_online/dist/index.html'
+            filename: './dist/static/index.html'
         }),
         new webpack.DefinePlugin({
             __DEV__: false
@@ -66,7 +66,7 @@ module.exports = {
         //     }
         // }),
         new webpack.optimize.OccurrenceOrderPlugin(),
-        new ExtractTextPlugin('./production_online/dist/css/[name].[chunkhash:8].css'),
+        new ExtractTextPlugin('./dist/static/css/[name].[chunkhash:8].css'),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false

@@ -44,7 +44,6 @@ handleSave(){
   this.handleIcon()
 }
   componentDidUpdate(){
-    console.log(111,this.props)
 this.state.points.push(this.props.point)
 this.state.icons.push(this.props.icon)
 

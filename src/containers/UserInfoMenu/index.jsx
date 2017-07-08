@@ -2,53 +2,68 @@ import React from 'react'
 import ToggleButton from './subpage/ToggleButton'
 import Settings from '../Settings'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
-export default class NavMenu extends React.Component{
+import {connect} from 'react-redux'
+import './style.less'
+ class NavMenu extends React.Component{
   //constructor function that assign the properties
    constructor(...args){
     super(...args)
     this.shouldComponentUpdate=PureRenderMixin.shouldComponentUpdate
     this.state={
-     isLogined:this.props.isLogined
+     isLogined:this.props.isLogined,
+     userInfo:null
     }
   }
-
-  componentDidMount(){
- 
+  componentWillUpdate(nextProps,nextStates){
+    console.log(222,nextProps)
+    const user=this.props.user
+    console.log(11,user)
   }
-
   render(){
+    // console.log(11,this.props.userInfo)
+     const userInfo=this.props.userInfo
     return(
-      <nav className="navbar navbar-static-top" role="navigation">
-     <ToggleButton/>
-   <div className="navbar-custom-menu">
-        <ul className="nav navbar-nav">
-     <li className="dropdown messages-menu">
-            <a href="#" className="dropdown-toggle" data-toggle="dropdown">
-              <i className="fa fa-envelope-o"></i>
-              <span className="label label-success">4</span>
+<nav className="navbar navbar-static-top" role="navigation">
+  <ToggleButton/>
+  <div className="navbar-custom-menu">
+  <ul className="nav navbar-nav">
+  <li className="dropdown messages-menu">
+  <a href="#" className="dropdown-toggle" data-toggle="dropdown">
+  <i className="fa fa-envelope-o"></i>
+              <span className="label label-success">{userInfo.message.length}</span>
             </a>
             <ul className="dropdown-menu">
-              <li className="header">You have 4 messages</li>
+              <li className="header">你有{userInfo.message.length}条消息</li>
               <li>
                 <ul className="menu">
-                  <li>
+                  {userInfo.message.map((item,index)=>{
+                    if(index<=3)  {
+                   return (
+                  <li key={index}>
                     <a href="#">
                       <div className="pull-left">
-                        <img src="dist/static/img/user2-160x160.jpg" className="img-circle" alt="User Image"/>
+                        <img src={item.avadar} className="img-circle" alt="User Image"/>
                       </div>
                       <h4>
-                        Support Team
-                        <small><i className="fa fa-clock-o"></i> 5 mins</small>
+                       {item.title}
+                        <small><i className="fa fa-clock-o"></i> {item.time} </small>
                       </h4>
                   
-                      <p>Why not buy a new awesome theme?</p>
+                      <p>{item.content}</p>
                     </a>
                   </li>
+                    
+                   
+                    )
+                    }
+                     
+                  })}
+                 
               
                 </ul>
            
               </li>
-              <li className="footer"><a href="#">See All Messages</a></li>
+              <li className="footer"><a href="#">查看全部</a></li>
             </ul>
           </li>
           <li className="dropdown notifications-menu">
@@ -112,40 +127,40 @@ export default class NavMenu extends React.Component{
       
             <a href="#" className="dropdown-toggle" data-toggle="dropdown">
        
-              <img src="dist/static/img/user2-160x160.jpg" className="user-image" alt="User Image"/>
+              <img src={userInfo.avadar} className="user-image" alt="User Image"/>
            
-              <span className="hidden-xs">Alexander Pierce</span>
+              <span className="hidden-xs">{userInfo.alias}</span>
             </a>
             <ul className="dropdown-menu">
            
               <li className="user-header">
-                <img src="dist/static/img/user2-160x160.jpg" className="img-circle" alt="User Image"/>
+                <img src={userInfo.avadar} className="img-circle" alt="User Image"/>
 
                 <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                {userInfo.alias}
+                  <small>{userInfo.state}</small>
                 </p>
               </li>
           
               <li className="user-body">
                 <div className="row">
                   <div className="col-xs-4 text-center">
-                    <a href="#">Followers</a>
+                    <a href="#">粉丝</a>
                   </div>
                   <div className="col-xs-4 text-center">
-                    <a href="#">Sales</a>
+                    <a href="#">推荐</a>
                   </div>
                   <div className="col-xs-4 text-center">
-                    <a href="#">Friends</a>
+                    <a href="#">关注</a>
                   </div>
                 </div>
               </li>
               <li className="user-footer">
                 <div className="pull-left">
-                  <a href="#" className="btn btn-default btn-flat">Profile</a>
+                  <a href="#" className="btn btn-default btn-flat">个人信息</a>
                 </div>
                 <div className="pull-right">
-                  <a href="#" className="btn btn-default btn-flat">Sign out</a>
+                  <a href="#" className="btn btn-default btn-flat">退出登录</a>
                 </div>
               </li>
             </ul>
@@ -157,3 +172,14 @@ export default class NavMenu extends React.Component{
     )
   }
 } 
+function mapStateToProps(state){
+return{
+user:state.user
+}
+}
+function mapDispatchToProps(dispatch){
+  return {
+    
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(NavMenu)

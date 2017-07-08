@@ -6,7 +6,10 @@ import {getCookie} from '../../cookie/get'
 import {setCookie} from '../../cookie/set'
 import TextInfo from './subpage/textInfo'
 import {handleLog} from '../../fetch/login/login'
-export default class SignIn extends React.Component{
+import {connect} from 'react-redux'
+import {bindActionCreators}from 'redux'
+import actions from '../../actions/user'
+class SignIn extends React.Component{
   //constructor function that assign the properties
    constructor(...args){
     super(...args)
@@ -55,8 +58,11 @@ handleClickLog(){
         if (json.statusCode === 1) {
             setCookie('email', this.state.logEmail, 7)
             setCookie('pass', this.state.logPass,7)
-            this.props.cancel()
-            window.location.href="http://localhost:8080"
+            $('#signup').modal('hide')
+            const userinfo=json.data
+            this.props.actions.update(userinfo)
+            console.log(this)
+            //window.location.href="http://localhost:8080"
         } else {
             this.setState({
                 text: json.text
@@ -100,7 +106,12 @@ handleRegSecondPass(){
   }
   render(){
     return(
- <div className="box box-info">
+<div className="modal-content">
+                <div className="modal-header">
+                    <button type="button" className="close" data-dismiss="modal">&times;</button>
+                    <h4 className="modal-title">{this.props.title}</h4>
+                </div>
+              <div className="box box-info">
              <div className="box-header with-border">
              <div className="nav-tabs-custom">
         <ul className="nav nav-tabs">
@@ -144,6 +155,9 @@ handleRegSecondPass(){
                         <TextInfo text={this.state.text}/>
                     </div>
                 </form>
+                <div className="modal-footer">
+                    <button data-dismiss="modal" className="btn btn-danger">关闭</button><button  onClick={this.handleReg.bind(this)} className="btn btn-success">注册</button>
+                </div>
             </div>
            
             <div className="tab-pane active" id="tab_2">
@@ -174,15 +188,30 @@ handleRegSecondPass(){
                          <TextInfo text={this.state.text}/>
                     </div>               
                 </form>
+                <div className="modal-footer">
+                    <button data-dismiss="modal" className="btn btn-danger">关闭</button><button onClick={this.handleClickLog.bind(this)} className="btn btn-success">登陆</button>
+                </div>
             </div>
         </div>
     </div>
               </div>
-         
            
           </div>
+            </div>
+ 
           
     )
   }
 } 
+function mapStateToProps(state){
+return{
+
+}
+}
+function mapDispatchToProps(dispatch){
+  return {
+    actions:bindActionCreators(actions,dispatch)
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(SignIn)
  

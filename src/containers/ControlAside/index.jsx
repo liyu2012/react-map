@@ -1,6 +1,6 @@
 import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
-export default class MapWrapper extends React.Component{
+export default class ControlAside extends React.Component{
   //constructor function that assign the properties
    constructor(...args){
     super(...args)

@@ -18,7 +18,7 @@ export default class IconSelector extends React.Component{
       return res.json()
     }).then(json=>{
       const icons=json
-      console.log(json)
+     // console.log(json)
       if(icons.statusCode===1){
    this.setState({
         icons:JSON.parse(icons.data)
